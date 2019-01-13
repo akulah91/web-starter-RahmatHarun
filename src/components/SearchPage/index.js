@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Query } from 'react-apollo';
 import { CircularProgress, AppBar, Toolbar, Button, Typography, IconButton, InputBase } from '@material-ui/core';
-import { Tune, List as ListIcon, Map } from '@material-ui/icons';
+import { Tune, List as ListIcon, Map ,LocationOn } from '@material-ui/icons';
 import SearchIcon from '@material-ui/icons/Search';
 import { RESTAURANT_SEARCH_QUERY } from '../../graphql/queries';
 import RestList from './RestList';
@@ -27,6 +27,40 @@ class SearchPage extends Component {
         this.setState({ address: value });
       }
     }
+  }
+
+  getCurrentLocation = () => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log('latitude', position.coords.latitude,
+            'longitude', position.coords.longitude);
+          this.setState({ lat: position.coords.latitude, lon: position.coords.longitude });
+          this.getAddress(position.coords.latitude, position.coords.longitude);
+        }, (errorMessage) => {
+          console.error('An error has occured while retrieving location', errorMessage);
+          this.ipLookUp();
+        }
+      );
+    } else {
+      console.log('geolocation is not enabled on this browser');
+      this.ipLookUp();
+    }
+  }
+
+  ipLookUp = () => {
+    fetch('http://ip-api.com/json')
+      .then((res) => res.json()).then((response) => {
+        this.setState({ lat: response.lat, lon: response.lon });
+        this.setState({ address: response.city });
+      });
+  }
+
+  getAddress = (latitude, longitude) => {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyBiIAghnw23k2HcviyzE6h_ForUAo84ro4`)
+      .then((res) => res.json()).then((response) => {
+        this.setState({ address: response.results[0].formatted_address });
+      });
   }
 
   render() {
@@ -78,7 +112,10 @@ class SearchPage extends Component {
                 </div>
                 <div className="searchMap">
                   <AppBar position="static" color="default" className="searchMapHeader">
-                    <Toolbar>
+                    <Toolbar> 
+                      <Button color="secondary" variant="contained" className="searchButton mylocation" onClick={this.getCurrentLocation}>
+                        <LocationOn /> Use my location
+                      </Button>
                       <div className="searchBox">
                         <div className="searchIcon">
                           <SearchIcon />
