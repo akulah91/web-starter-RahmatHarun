@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { RESTAURANT_SEARCH_QUERY } from '../../graphql/queries';
+import RestList from './RestList';
 
 class SearchPage extends Component {
   constructor(props) {
@@ -37,9 +38,7 @@ class SearchPage extends Component {
           ) {
             return (
               <div>
-                {data.search_restaurants.results.map((r) => {
-                  return <div>{r.title} ({r.id})</div>;
-                })}
+                <RestList data={data.search_restaurants.results} />
               </div>
             );
           }
