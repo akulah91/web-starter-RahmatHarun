@@ -14,7 +14,7 @@ const AnyReactComponent = ({ text, onClick, className}) => (
 export default class SearchMap extends Component {
   render() {
     const {data, currentLoc, nav} = this.props;
-    const defaultindex = Math.floor(data.length / 2);
+    const defaultindex = data.length > 5 ? Math.floor(data.length / 2) : 0;
     return (
       <GoogleMapReact
         bootstrapURLKeys={{ key: 'AIzaSyBiIAghnw23k2HcviyzE6h_ForUAo84ro4'}}
