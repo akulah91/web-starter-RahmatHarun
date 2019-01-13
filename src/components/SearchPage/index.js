@@ -6,11 +6,12 @@ import { RESTAURANT_SEARCH_QUERY } from '../../graphql/queries';
 
 class SearchPage extends Component {
   constructor(props) {
-  super(props);
-  this.state = {
-    address: 'chicago',
-  };
-}
+    super(props);
+    this.state = {
+      address: 'chicago',
+    };
+  }
+
   render() {
     const { address} = this.state;
     return (
