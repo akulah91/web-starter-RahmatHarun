@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 import { Query } from 'react-apollo';
-import { CircularProgress, AppBar, Toolbar, Button, Typography, IconButton, InputBase } from '@material-ui/core';
-import { Tune, List as ListIcon, Map ,LocationOn } from '@material-ui/icons';
+import { CircularProgress, AppBar, Toolbar, Button, Typography, IconButton, InputBase, Hidden, Grid, Divider } from '@material-ui/core';
+import { Tune, List as ListIcon, Map, LocationOn } from '@material-ui/icons';
 import SearchIcon from '@material-ui/icons/Search';
 import { RESTAURANT_SEARCH_QUERY } from '../../graphql/queries';
 import RestList from './RestList';
@@ -15,6 +15,7 @@ class SearchPage extends Component {
       address: 'chicago',
       lat: 0,
       lon: 0,
+      mobilesearch: '',
     };
   }
 
@@ -63,14 +64,19 @@ class SearchPage extends Component {
       });
   }
 
+  searchNow=() => {
+    const{mobilesearch} = this.state;
+    this.setState({ address: mobilesearch});
+  }
+
   render() {
-    const { address, lat, lon } = this.state;
-    const {history} = this.props;
+    const { address, lat, lon, mobilesearch } = this.state;
+    const { history } = this.props;
     return (
       // Variables can be either lat and lon OR address
       <Query
         query={RESTAURANT_SEARCH_QUERY}
-        variables={{address}}
+        variables={{ address }}
       >
         {({ loading, error, data = {} }) => {
           if (loading) {
@@ -88,57 +94,82 @@ class SearchPage extends Component {
             && data.search_restaurants.results.length > 0
           ) {
             return (
-              <div className="searchPage">
-                <div className="searchList">
-                  <AppBar position="static" color="default" className="searchListHeader">
-                    <Toolbar>
-                      <Typography variant="h4" className="searchListTitle">
-                        Foodsy
-                      </Typography>
-                      <IconButton aria-label="ListIcon" color="secondary" className="rightSearchButton">
-                        <ListIcon fontSize="large" />
-                      </IconButton>
-                      <IconButton aria-label="Map">
-                        <Map fontSize="large" />
-                      </IconButton>
-                      <Button variant="outlined" className=" searchListButton">
-                        Filter
-                        <Tune />
-                      </Button>
 
+              <Grid container spacing={0} className="searchPage">
+                <Grid item xs={12} md={4} className="searchList">
+                  <AppBar position="static" color="default" className="searchListHeader" xs={12} md={4}>
+                    <Toolbar>
+
+                      <Hidden xsDown>
+                        <Typography variant="h4" className="searchListTitle">
+                          Foodsy
+                        </Typography>
+                      </Hidden>
+                      <Hidden smDown>
+                        <IconButton aria-label="ListIcon" color="secondary" className="rightSearchButton">
+                          <ListIcon fontSize="large" />
+                        </IconButton>
+                        <IconButton aria-label="Map">
+                          <Map fontSize="large" />
+                        </IconButton>
+                        <Button variant="outlined" className=" searchListButton">
+                          Filter
+                          <Tune />
+                        </Button>
+                      </Hidden>
+                      <Hidden mdUp>
+                        <InputBase
+                          placeholder="Search food in your area..."
+                          className="mobileSearchField"
+                          onKeyPress={this.handleKeyPress}
+                          value={mobilesearch}
+                          onChange={(e) => { this.setState({mobilesearch: e.target.value}); }}
+                        />
+                        <IconButton aria-label="Search" onClick={this.searchNow}>
+                          <SearchIcon />
+                        </IconButton>
+                        <Divider />
+                        <IconButton color="primary" aria-label="Gps" onClick={this.getCurrentLocation}>
+                          <LocationOn />
+                        </IconButton>
+
+                      </Hidden>
                     </Toolbar>
                   </AppBar>
                   <RestList data={data.search_restaurants.results} nav={history} />
-                </div>
-                <div className="searchMap">
-                  <AppBar position="static" color="default" className="searchMapHeader">
-                    <Toolbar> 
-                      <Button color="secondary" variant="contained" className="searchButton mylocation" onClick={this.getCurrentLocation}>
-                        <LocationOn /> Use my location
-                      </Button>
-                      <div className="searchBox">
-                        <div className="searchIcon">
-                          <SearchIcon />
+                </Grid>
+
+                <Grid item xs={0} md={8} className="searchList">
+                  <div className="searchMap">
+                    <AppBar position="static" color="default" className="searchMapHeader">
+                      <Toolbar>
+                        <Button color="secondary" variant="contained" className="searchButton mylocation" onClick={this.getCurrentLocation}>
+                          <LocationOn /> Use my location
+                        </Button>
+                        <div className="searchBox">
+                          <div className="searchIcon">
+                            <SearchIcon />
+                          </div>
+                          <InputBase className="searchInput" placeholder="Search food in your area..." onKeyPress={this.handleKeyPress} />
                         </div>
-                        <InputBase className="searchInput" placeholder="Search food in your area..." onKeyPress={this.handleKeyPress} />
-                      </div>
 
-                      <Button color="secondary" variant="contained" className="rightSearchButton searchButton loginbtn">
-                        Log In
-                      </Button>
-                      <Button variant="contained" className="searchButton ">
-                        Sign Up
-                      </Button>
-                    </Toolbar>
-                  </AppBar>
-                  <SearchMap
-                    data={data.search_restaurants.results}
-                    nav={history}
-                    currentLoc={{ lat, lon }}
-                  />
+                        <Button color="secondary" variant="contained" className="rightSearchButton searchButton loginbtn">
+                          Log In
+                        </Button>
+                        <Button variant="contained" className="searchButton ">
+                          Sign Up
+                        </Button>
+                      </Toolbar>
+                    </AppBar>
+                    <SearchMap
+                      data={data.search_restaurants.results}
+                      nav={history}
+                      currentLoc={{ lat, lon }}
+                    />
 
-                </div>
-              </div>
+                  </div>
+                </Grid>
+              </Grid>
             );
           }
 

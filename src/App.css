@@ -31,11 +31,11 @@
 .searchList{
   height: 100vh;
   overflow: hidden;
-  width:35vw;
+ 
 }
 
 .searchListHeader{
-  width: 35vw !important;
+  
   box-shadow: none !important;
 }
 .searchListTitle{
@@ -50,6 +50,10 @@
 .searchListBox{
   overflow: auto;
   height: 90vh;
+}
+.mobileSearchField{
+  width:70%;
+  margin-left: 10px !important;
 }
 .searchMap{
   height: 100vh;
