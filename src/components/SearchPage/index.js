@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import { Query } from 'react-apollo';
-import { CircularProgress, AppBar, Toolbar, Button, Typography, IconButton } from '@material-ui/core';
+import { CircularProgress, AppBar, Toolbar, Button, Typography, IconButton, InputBase } from '@material-ui/core';
 import { Tune, List as ListIcon, Map } from '@material-ui/icons';
+import SearchIcon from '@material-ui/icons/Search';
 import { RESTAURANT_SEARCH_QUERY } from '../../graphql/queries';
 import RestList from './RestList';
 import SearchMap from './SearchMap';
@@ -15,6 +16,17 @@ class SearchPage extends Component {
       lat: 0,
       lon: 0,
     };
+  }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      const target = e.target;
+      const value = target.value;
+
+      if (value.length) {
+        this.setState({ address: value });
+      }
+    }
   }
 
   render() {
@@ -67,6 +79,12 @@ class SearchPage extends Component {
                 <div className="searchMap">
                   <AppBar position="static" color="default" className="searchMapHeader">
                     <Toolbar>
+                      <div className="searchBox">
+                        <div className="searchIcon">
+                          <SearchIcon />
+                        </div>
+                        <InputBase className="searchInput" placeholder="Search food in your area..." onKeyPress={this.handleKeyPress} />
+                      </div>
 
                       <Button color="secondary" variant="contained" className="rightSearchButton searchButton loginbtn">
                         Log In

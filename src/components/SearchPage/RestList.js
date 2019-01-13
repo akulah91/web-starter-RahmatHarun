@@ -98,10 +98,14 @@ const RestaurantCard = ({ data, nav}) => {
 
 const getCloseHour = (data) => {
   const day = moment().format('ddd').toLocaleLowerCase();
-  const time = data.split(' ').find((element) => {
-    return element.split(':')[0].toLocaleLowerCase() === day;
-  });
-  return time ? moment(time.substr(-4), 'HHmm').format('h:mm a') : '';
+  if(data) {
+    const time = data.split(' ').find((element) => {
+      return element.split(':')[0].toLocaleLowerCase() === day;
+    });
+    return moment(time.substr(-4), 'HHmm').format('h:mm a');
+  }
+
+  return '';
 };
 
 const getWalkTime = (dist) => {
