@@ -138,7 +138,7 @@ class SearchPage extends Component {
                   </AppBar>
                   <RestList data={data.search_restaurants.results} nav={history} />
                 </Grid>
-
+                <Hidden smDown>
                 <Grid item xs={0} md={8} className="searchList">
                   <div className="searchMap">
                     <AppBar position="static" color="default" className="searchMapHeader">
@@ -169,6 +169,7 @@ class SearchPage extends Component {
 
                   </div>
                 </Grid>
+                </Hidden>
               </Grid>
             );
           }
