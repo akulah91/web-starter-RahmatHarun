@@ -9,18 +9,18 @@ import moment from 'moment';
 import { Star, LocationOn, DirectionsWalk} from '@material-ui/icons';
 
 const RestList = (props) => {
-  const{data,nav} = props;
+  const{data, nav} = props;
   return (
     <List className="searchListBox">
       {data.map((r) => {
-        return <RestaurantCard data={r} nav={nav}/>;
+        return <RestaurantCard data={r} nav={nav} />;
       })}
     </List>
   );
 };
 export default RestList;
 
-const RestaurantCard = ({ data,nav}) => {
+const RestaurantCard = ({ data, nav}) => {
   return (
     <ListItem style={{ display: 'flex', flexDirection: 'column' }}>
       <Card style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>

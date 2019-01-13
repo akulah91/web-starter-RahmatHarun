@@ -5,17 +5,20 @@ import { CircularProgress, AppBar, Toolbar, Button, Typography, IconButton } fro
 import { Tune, List as ListIcon, Map } from '@material-ui/icons';
 import { RESTAURANT_SEARCH_QUERY } from '../../graphql/queries';
 import RestList from './RestList';
+import SearchMap from './SearchMap';
 
 class SearchPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       address: 'chicago',
+      lat: 0,
+      lon: 0,
     };
   }
 
   render() {
-    const { address} = this.state;
+    const { address, lat, lon } = this.state;
     const {history} = this.props;
     return (
       // Variables can be either lat and lon OR address
@@ -39,8 +42,9 @@ class SearchPage extends Component {
             && data.search_restaurants.results.length > 0
           ) {
             return (
-              <div>
-                <AppBar position="static" color="default" className="searchListHeader">
+              <div className="searchPage">
+                <div className="searchList">
+                  <AppBar position="static" color="default" className="searchListHeader">
                     <Toolbar>
                       <Typography variant="h4" className="searchListTitle">
                         Foodsy
@@ -58,7 +62,27 @@ class SearchPage extends Component {
 
                     </Toolbar>
                   </AppBar>
-                <RestList data={data.search_restaurants.results} nav={history} />
+                  <RestList data={data.search_restaurants.results} nav={history} />
+                </div>
+                <div className="searchMap">
+                  <AppBar position="static" color="default" className="searchMapHeader">
+                    <Toolbar>
+
+                      <Button color="secondary" variant="contained" className="rightSearchButton searchButton loginbtn">
+                        Log In
+                      </Button>
+                      <Button variant="contained" className="searchButton ">
+                        Sign Up
+                      </Button>
+                    </Toolbar>
+                  </AppBar>
+                  <SearchMap
+                    data={data.search_restaurants.results}
+                    nav={history}
+                    currentLoc={{ lat, lon }}
+                  />
+
+                </div>
               </div>
             );
           }
