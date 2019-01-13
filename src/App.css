@@ -22,9 +22,26 @@
   color: #61dafb;
 }
 
+.searchListHeader{
+  width: 100% !important;
+  box-shadow: none !important;
+}
+.searchListTitle{
+  font-style: italic;
+  font-weight: bold;
+}
+.searchListButton{
+
+  border-radius: 30px !important;
+  margin-left: 16px !important;
+}
 .searchListBox{
   overflow: auto;
   height: 90vh;
+}
+
+.rightSearchButton{
+  margin-left: auto !important;
 }
 
 @keyframes App-logo-spin {
