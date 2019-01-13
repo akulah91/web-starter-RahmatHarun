@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 import { Query } from 'react-apollo';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { CircularProgress, AppBar, Toolbar, Button, Typography, IconButton } from '@material-ui/core';
+import { Tune, List as ListIcon, Map } from '@material-ui/icons';
 import { RESTAURANT_SEARCH_QUERY } from '../../graphql/queries';
 import RestList from './RestList';
 
@@ -15,6 +16,7 @@ class SearchPage extends Component {
 
   render() {
     const { address} = this.state;
+    const {history} = this.props;
     return (
       // Variables can be either lat and lon OR address
       <Query
@@ -38,7 +40,25 @@ class SearchPage extends Component {
           ) {
             return (
               <div>
-                <RestList data={data.search_restaurants.results} />
+                <AppBar position="static" color="default" className="searchListHeader">
+                    <Toolbar>
+                      <Typography variant="h4" className="searchListTitle">
+                        Foodsy
+                      </Typography>
+                      <IconButton aria-label="ListIcon" color="secondary" className="rightSearchButton">
+                        <ListIcon fontSize="large" />
+                      </IconButton>
+                      <IconButton aria-label="Map">
+                        <Map fontSize="large" />
+                      </IconButton>
+                      <Button variant="outlined" className=" searchListButton">
+                        Filter
+                        <Tune />
+                      </Button>
+
+                    </Toolbar>
+                  </AppBar>
+                <RestList data={data.search_restaurants.results} nav={history} />
               </div>
             );
           }
